@@ -1,0 +1,2 @@
+# AlgoTrading
+Algorithmic trading strategies
