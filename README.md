@@ -133,5 +133,3 @@ This project is for educational purposes only. Algorithmic trading carries risks
 ## 📜 License
 
 This repository is licensed under the MIT License. You can find the full license text in the LICENSE file.
-
-This version ensures the entire document uses proper Markdown syntax for headings, code blocks, lists, and other elements. Let me know if there are more changes you’d like!
