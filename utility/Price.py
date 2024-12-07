@@ -38,3 +38,6 @@ app.reqMktData(1, apple_contract, '', False, False, [])
 
 time.sleep(10) #Sleep interval to allow time for incoming price data
 app.disconnect()
+
+def getCurrentPrice(ticker: str):
+	pass

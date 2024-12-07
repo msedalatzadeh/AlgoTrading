@@ -1,14 +1,20 @@
 from ibapi.client import *
 from ibapi.wrapper import *
+import sys; sys.path.append('/Users/sajjadedalatzadeh/GitHub/AlgoTrading')
+from utility.price import getCurrentPrice
+from utility.account import getBalanceInUSD
+import numpy as np
 
 class OrderApi(EClient, EWrapper):
-  def __init__(self, type: str, action: str, ticker: str, qunatity: int, price: Decimal = None):
+  def __init__(self, type: str, action: str, ticker: str, qunatity: int = None, price: Decimal = None):
     EClient.__init__(self, self)
     self.type = type
     self.action = action
     self.price = price
     self.qunatity = qunatity
     self.ticker = ticker
+    self.balance = getBalanceInUSD() 
+    self.stockPrice = getCurrentPrice(self.ticker)
 
   def nextValidId(self, orderId: OrderId):
     contract = Contract()
@@ -26,10 +32,19 @@ class OrderApi(EClient, EWrapper):
     order.orderId = reqId
     order.action = self.action
     order.orderType = self.type
-    order.totalQuantity = self.qunatity
+    if self.qunatity:
+        order.totalQuantity = self.qunatity
+    else:
+        self.qunatity = np.floor(self.balance * 0.95 / self.stockPrice)
+    
     if self.type == 'LMT':
-      order.lmtPrice = self.price
-      order.tif = 'GTC'
+        order.tif = 'GTC'
+        if self.price:
+            order.lmtPrice = self.price
+        elif self.action == 'SELL':
+            order.lmtPrice = round(self.stockPrice * 0.99, 2)
+        elif self.action == 'BUY':
+            order.lmtPrice = round(self.stockPrice * 1.01, 2)
       
     self.placeOrder(order.orderId, contractDetails.contract, order)
 
@@ -46,6 +61,3 @@ def submitOrder(type: str, action: str, qunatity: int, price: Decimal = None):
     app = OrderApi(type, action, qunatity, price)
     app.connect("127.0.0.1", 7497, 100)
     app.run()
-
-def test():
-  print('test is working')
