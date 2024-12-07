@@ -63,7 +63,7 @@ pip install -r requirements.txt
 3.	Configure the IBKR API:
 	•	Open utility/connection.py and update the host, port, and client ID settings to match your IBKR TWS or IB Gateway configuration.
 
-### 🚀 Usage
+## 🚀 Usage
 
 Running Pre-Built Algorithms
 
@@ -94,7 +94,7 @@ client = connect()
 submitOrder(client, action="BUY", symbol="AAPL", quantity=10)
 ```
 
-### 🧪 Backtesting
+## 🧪 Backtesting
 
 The data/historical.py module enables you to retrieve historical market data, which you can use for testing your strategies. Example workflow:
 
@@ -102,7 +102,7 @@ The data/historical.py module enables you to retrieve historical market data, wh
 2.	Write a script to simulate trades based on your strategy logic.
 3.	Analyze the performance metrics of your strategy.
 
-### 💻 Contributing
+## 💻 Contributing
 
 We welcome contributions to enhance this repository! Here’s how you can contribute:
 
@@ -126,11 +126,11 @@ git push origin feature-name
 
 5.	Submit a pull request for review.
 
-### ⚠️ Disclaimer
+## ⚠️ Disclaimer
 
 This project is for educational purposes only. Algorithmic trading carries risks. Always test your strategies extensively in simulated environments before deploying them to live trading. The maintainers are not responsible for any financial losses or API-related issues.
 
-### 📜 License
+## 📜 License
 
 This repository is licensed under the MIT License. You can find the full license text in the LICENSE file.
 
