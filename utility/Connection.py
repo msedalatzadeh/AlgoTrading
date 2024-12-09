@@ -6,9 +6,10 @@ class IBapi(EWrapper, EClient):
      def __init__(self):
          EClient.__init__(self, self) 
 
-app = IBapi()
-app.connect('127.0.0.1', 7497, 123)
-app.run()
+def testApi():
+    app = IBapi()
+    app.connect('127.0.0.1', 7497, 123)
+    app.run()
 
-time.sleep(2)
-app.disconnect()
+    time.sleep(2)
+    app.disconnect()
