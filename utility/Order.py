@@ -1,8 +1,7 @@
 from ibapi.client import *
 from ibapi.wrapper import *
 import sys; sys.path.append('/Users/sajjadedalatzadeh/GitHub/AlgoTrading')
-from utility.price import getCurrentPrice
-from utility.account import getBalanceInUSD
+from utility import price, account
 import numpy as np
 
 class OrderApi(EClient, EWrapper):
@@ -13,8 +12,8 @@ class OrderApi(EClient, EWrapper):
     self.price = price
     self.qunatity = qunatity
     self.ticker = ticker
-    self.balance = getBalanceInUSD() 
-    self.stockPrice = getCurrentPrice(self.ticker)
+    self.balance = account.getBalanceInUSD() 
+    self.stockPrice = price.getCurrentPrice(self.ticker)
 
   def nextValidId(self, orderId: OrderId):
     contract = Contract()

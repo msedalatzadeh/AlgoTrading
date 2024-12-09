@@ -1,43 +1,49 @@
 from ibapi.client import EClient
 from ibapi.wrapper import EWrapper
 from ibapi.contract import Contract
-
 import threading
 import time
+from datetime import datetime
 
-
-class IBapi(EWrapper, EClient):
+class priceApi(EWrapper, EClient):
 	def __init__(self):
 		EClient.__init__(self, self)
+		self.stockPrice = None
+	
 	def tickPrice(self, reqId, tickType, price, attrib):
-		if tickType == 68 and reqId == 1:
-			print('The current ask price is: ', price)
+		now = datetime.now()
+		isMarketClosed = now.hour>=16 or now.hour< 9 or (now.hour==9 and now.minute<30)
+		if isMarketClosed and tickType == 75 and reqId == 1:
+			self.stockPrice = price
+		elif not isMarketClosed and tickType == 68 and reqId == 1:
+			self.stockPrice = price
+			
 
-def run_loop():
-	app.run()
+def getStockPrice(ticker: str) -> float:
+	def run_loop():
+		app.run()
 
-app = IBapi()
-app.connect('127.0.0.1', 7497, 123)
+	app = priceApi()
+	app.connect('127.0.0.1', 7497, 123)
 
-#Start the socket in a thread
-api_thread = threading.Thread(target=run_loop, daemon=True)
-api_thread.start()
+	#Start the socket in a thread
+	api_thread = threading.Thread(target=run_loop, daemon=True)
+	api_thread.start()
 
-time.sleep(1) #Sleep interval to allow time for connection to server
-app.reqMarketDataType(3)
+	time.sleep(1) #Sleep interval to allow time for connection to server
+	app.reqMarketDataType(3)
 
-#Create contract object
-apple_contract = Contract()
-apple_contract.symbol = 'AAPL'
-apple_contract.secType = 'STK'
-apple_contract.exchange = 'SMART'
-apple_contract.currency = 'USD'
+	#Create contract object
+	contract = Contract()
+	contract.symbol = ticker
+	contract.secType = 'STK'
+	contract.exchange = 'SMART'
+	contract.currency = 'USD'
 
-#Request Market Data
-app.reqMktData(1, apple_contract, '', False, False, [])
+	#Request Market Data
+	app.reqMktData(1, contract, '', False, False, [])
 
-time.sleep(10) #Sleep interval to allow time for incoming price data
-app.disconnect()
+	time.sleep(10) #Sleep interval to allow time for incoming price data
+	app.disconnect()
 
-def getCurrentPrice(ticker: str):
-	pass
+	return float(app.stockPrice) if app.stockPrice is not None else None
