@@ -1,0 +1,13 @@
+{
+  "type": "module",
+  "dependencies": {
+    "ai": "^4.0.13",
+    "node-fetch": "^3.3.2",
+    "open": "^10.1.0",
+    "openai": "^4.76.0",
+    "require": "^2.4.20"
+  },
+  "devDependencies": {
+    "raw-loader": "^4.0.2"
+  }
+}
