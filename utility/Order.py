@@ -34,11 +34,13 @@ class OrderApi(EClient, EWrapper):
     order.orderType = self.type
     if self.qunatity:
         order.totalQuantity = self.qunatity
-    else:
+    elif self.action == 'BUY':
         self.balance = account.getBalanceInUSD()
         self.stockPrice = price.getStockPrice(self.ticker)
-        self.qunatity = np.floor(self.balance * 0.95 / self.stockPrice)
-    
+        order.totalQuantity = int(np.floor(self.balance * 0.95 / self.stockPrice))
+    #elif self.action == 'SELL':
+        # order.totalQuantity = account.getOwnedShares(self.ticker) # tech debt
+
     if self.type == 'LMT':
         order.tif = 'GTC'
         if self.price:
