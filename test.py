@@ -2,7 +2,7 @@ from utility import order
 from ai import sentiment
 from data import scannerParameters, topLosers, topGainers
 from algorithm import gapUpOverNight
-from utility import price
+from utility import price, order
 
 ################
 # test sentiment
@@ -19,9 +19,13 @@ from utility import price
 
 ####################
 # test gapUpOverNight algorithm
-## gapUpOverNight.implement()
+gapUpOverNight.implement()
 
 ############
 # test price
-p = price.getStockPrice('TSLA') # this need some optimization
-print("price is: ", p)
+##p = price.getStockPrice('TSLA') # this need some optimization
+##print("price is: ", p)
+
+#########
+# submit order
+## order.submitOrder('MKT', 'SELL', 'GOOGL', 35)

@@ -4,6 +4,7 @@ from ibapi.contract import Contract
 import threading
 import time
 from datetime import datetime
+from ibapi.ticktype import TickTypeEnum
 
 class priceApi(EWrapper, EClient):
 	def __init__(self):
@@ -14,7 +15,7 @@ class priceApi(EWrapper, EClient):
 		now = datetime.now()
 		isMarketClosed = now.hour>=16 or now.hour< 9 or (now.hour==9 and now.minute<30)
 		#print(tickType, price)
-		if not self.stockPrice and tickType == 4 and reqId == 1:
+		if not self.stockPrice and tickType == 4  and reqId == 1:
 			self.stockPrice = price
 		elif not self.stockPrice and tickType == 68 and reqId == 1:
 			self.stockPrice = price
@@ -23,14 +24,11 @@ class priceApi(EWrapper, EClient):
 			
 
 def getStockPrice(ticker: str) -> float:
-	def run_loop():
-		app.run()
-
 	app = priceApi()
 	app.connect('127.0.0.1', 7497, 123)
 
 	#Start the socket in a thread
-	api_thread = threading.Thread(target=run_loop, daemon=True)
+	api_thread = threading.Thread(target=app.run, daemon=True)
 	api_thread.start()
 
 	time.sleep(1) #Sleep interval to allow time for connection to server

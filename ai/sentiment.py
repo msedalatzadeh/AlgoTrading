@@ -16,7 +16,7 @@ def getSentiment(ticker: str):
     ]
     model = models[3]
     promptString = json.dumps(prompt, separators=(',', ':'))
-    result = subprocess.run(["node", "ai/model.js", promptString, model], capture_output=True, text=True)
+    result = subprocess.run(["node", "ai/github-AI-models.js", promptString, model], capture_output=True, text=True)
     result.stdout = remove_newlines(result.stdout)
     
     # Using regex to check if it’s purely a number
