@@ -1,49 +1,29 @@
-from ibapi.client import EClient
-from ibapi.wrapper import EWrapper
+
+import sys; sys.path.append('/Users/sajjadedalatzadeh/GitHub/AlgoTrading')
+from data import scanner
 from ibapi.scanner import ScannerSubscription
 import time
 import threading
 
-class TopGainersApi(EWrapper, EClient):
-    def __init__(self):
-        EClient.__init__(self, self)
-
-    def scannerData(self, reqId, rank, contractDetails, distance, benchmark, projection, legsStr):
-        super().scannerData(reqId, rank, contractDetails, distance, benchmark, projection, legsStr)
-        print(contractDetails.contract.symbol)
-
-class ParametersApi(EWrapper, EClient):
-    def __init__(self):
-        EClient.__init__(self, self)
-
-    def scannerParameters(self, xml):
-        super().scannerParameters(xml)
-        open('scanner_params.xml', 'w').write(xml)
-        print("ScannerParameters received.")
-
-def usStkScan(asset_type="STK", asset_loc="STK.US.MAJOR", scan_code="BOTTOM_PERC_GAIN"):
+def __usStkScan__(count: int):
     scanSub = ScannerSubscription()
-    scanSub.numberOfRows = 50
-    scanSub.abovePrice = 10
-    scanSub.belowPrice = 200
-    scanSub.aboveVolume = 1000000
-    scanSub.instrument = asset_type
-    scanSub.locationCode = asset_loc
-    scanSub.scanCode = scan_code
+    scanSub.numberOfRows = count
+    scanSub.abovePrice = 5
+    scanSub.belowPrice = 1000
+    scanSub.aboveVolume = 2*10**6
+    scanSub.instrument = "STK"
+    scanSub.locationCode = "STK.US.MAJOR"
+    scanSub.scanCode = "TOP_PERC_LOSE"
     return scanSub
 
-def get():
-    app = TopGainersApi()
-    app.connect(host='127.0.0.1', port=7496, clientId=23)
+def get(count: int) -> list[str]:
+    app = scanner.ScannerApi()
+    app.connect(host='127.0.0.1', port=7497, clientId=23)
     con_thread = threading.Thread(target=app.run)
     con_thread.start()
 
     time.sleep(1)  # some latency added to ensure that the connection is established
-    app.reqScannerSubscription(1, usStkScan(), [], [])
-
-def getParameters():
-    app = ParametersApi()
-    app.connect(host='127.0.0.1', port=7496, clientId=23)
-
-    app.reqScannerParameters()
-    app.run()
+    app.reqScannerSubscription(1, __usStkScan__(count), [], [])
+    time.sleep(10)
+    print(app.topLosers)
+    return app.topLosers

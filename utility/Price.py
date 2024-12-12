@@ -14,9 +14,11 @@ class priceApi(EWrapper, EClient):
 		now = datetime.now()
 		isMarketClosed = now.hour>=16 or now.hour< 9 or (now.hour==9 and now.minute<30)
 		#print(tickType, price)
-		if isMarketClosed and (tickType == 75 or tickType == 4) and reqId == 1:
+		if not self.stockPrice and tickType == 4 and reqId == 1:
 			self.stockPrice = price
-		elif not isMarketClosed and (tickType == 68 or tickType == 4) and reqId == 1:
+		elif not self.stockPrice and tickType == 68 and reqId == 1:
+			self.stockPrice = price
+		elif not self.stockPrice and isMarketClosed and tickType == 75 and reqId == 1:
 			self.stockPrice = price
 			
 

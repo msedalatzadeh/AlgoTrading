@@ -15,6 +15,7 @@ class OrderApi(EClient, EWrapper):
     self.ticker = ticker
     self.balance = None
     self.stockPrice = None
+    self.avgFillPrice = None
 
   def nextValidId(self, orderId: OrderId):
     contract = Contract()
@@ -58,6 +59,7 @@ class OrderApi(EClient, EWrapper):
     print(f"openOrder. orderId: {orderId}, contract: {contract}, order: {order}")
 
   def orderStatus(self, orderId: OrderId, status: str, filled: Decimal, remaining: Decimal, avgFillPrice: float, permId: int, parentId: int, lastFillPrice: float, clientId: int, whyHeld: str, mktCapPrice: float):
+    self.avgFillPrice = avgFillPrice
     print(f"orderId: {orderId}, status: {status}, filled: {filled}, remaining: {remaining}, avgFillPrice: {avgFillPrice}, permId: {permId}, parentId: {parentId}, lastFillPrice: {lastFillPrice}, clientId: {clientId}, whyHeld: {whyHeld}, mktCapPrice: {mktCapPrice}")
 
   def execDetails(self, reqId: int, contract: Contract, execution: Execution):
@@ -71,4 +73,4 @@ def submitOrder(type: str, action: str, ticker: str, qunatity: int = None, price
     time.sleep(10)
     app.disconnect()
     
-    return
+    return app.avgFillPrice

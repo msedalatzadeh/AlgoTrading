@@ -1,3 +1,12 @@
 {
-    "prompt" : "What's the future of Kodiak Science Inc."
+    "messages": [
+        {
+            "role": "system",
+            "content": "You are a financial expert with a deep understanding of stock market trends and sentiment analysis."
+        },
+        {
+            "role": "user",
+            "content": "Analyze the overall market sentiment for the stock with ticker symbol 'SERV' based on recent news, social media, and financial reports. Output a sentiment score ranging from -1 to +1, where -1 represents the most bearish sentiment and +1 represents the most bullish sentiment. The output must be just the sentiment number."
+        }
+    ]
 }
